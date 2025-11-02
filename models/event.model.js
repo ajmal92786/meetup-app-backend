@@ -30,7 +30,10 @@ const eventSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    venueAddress: {
+    venue: {
+      type: String,
+    },
+    address: {
       type: String,
     },
     price: {
