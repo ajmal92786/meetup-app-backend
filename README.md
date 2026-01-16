@@ -1,160 +1,202 @@
-# 🎉 Meetup App — Backend
+# Meetup App – Backend ⚙️
 
-The **Meetup App Backend** powers the event management system, providing RESTful APIs for listing events, fetching event details, and managing event data. Built using **Node.js**, **Express**, and **MongoDB (Mongoose)**, it serves as the data layer for the [Meetup App Frontend](https://github.com/ajmal92786/meetup-app-frontend).
+This repository contains the **backend server** for the Meetup App. It is responsible for managing events data, handling API requests, and communicating with the MongoDB database.
+
+The backend is built using **Node.js**, **Express.js**, and **MongoDB (Mongoose)**, following a clean and minimal REST API structure.
+
+---
+
+## 🌐 Live API
+
+🔗 **Backend Base URL:** [https://meetup-app-backend-eac.vercel.app/](https://meetup-app-backend-eac.vercel.app/)
 
 ---
 
 ## 🚀 Features
 
-- 🔹 Fetch all events
-- 🔹 Get a specific event by its ID
-- 🔹 Connected with MongoDB using Mongoose
-- 🔹 Organized and clean folder structure
-- 🔹 Uses environment variables for configuration
-- 🔹 Well-structured routes, controllers, and models
+- 📋 Fetch all meetup events
+- 🔍 Fetch a single event by ID
+- 🧠 Centralized database connection logic
+- ⚡ RESTful API design
+- 🌍 CORS-enabled for frontend integration
+- 🧩 Clean and minimal server structure
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠 Tech Stack
 
-- **Node.js** – Runtime environment
-- **Express.js** – Web framework
-- **MongoDB** – NoSQL database
-- **Mongoose** – ODM for MongoDB
-- **dotenv** – Environment configuration
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- CORS
 
 ---
 
-## 📁 Folder Structure
+## 📁 Project Structure
 
 ```
 meetup-app-backend/
 ├── db/
-│   └── db.connect.js
+│   └── db.connect.js       # Database connection logic
 ├── models/
-│   └── event.model.js
-├── index.js
+│   └── event.model.js      # Event schema and model
+├── index.js                # Express server entry point
 ├── package.json
-└── .env
+├── package-lock.json
+└── README.md
 ```
 
 ---
 
 ## ⚙️ Environment Variables
 
-Create a `.env` file in the root directory and add:
+Create a `.env` file in the root of the project:
+
+```env
+PORT=3000
+MONGODB_URI=your_mongodb_connection_string
+```
+
+---
+
+## 💻 Getting Started
+
+### 1️⃣ Clone the Repository
 
 ```bash
-MONGODB=<your_mongodb_connection_string>
-PORT=3000
+git clone https://github.com/ajmal92786/meetup-app-backend.git
+cd meetup-app-backend
+```
+
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Start the Server
+
+```bash
+npm start
+```
+
+Server will run on:
+👉 **[http://localhost:3000](http://localhost:3000)**
+
+---
+
+## 🔗 API Endpoints
+
+### 🏠 Health Check
+
+```http
+GET /
+```
+
+Response:
+
+```html
+Welcome to my Meetup App Server.
 ```
 
 ---
 
-## 💾 Seeding Sample Data
+### 📋 Get All Events
 
-You can seed sample event data using a script like `seed.js`:
-
-```js
-const { initializeDatabase } = require("./db/db.connect");
-const Event = require("./models/event.model");
-const eventsData = require("./data/events.json");
-
-initializeDatabase();
-
-const seedEvents = async () => {
-  try {
-    await Event.deleteMany({});
-    await Event.insertMany(eventsData);
-    console.log("✅ Events seeded successfully!");
-    process.exit(0);
-  } catch (error) {
-    console.error("❌ Error seeding events:", error);
-    process.exit(1);
-  }
-};
-
-seedEvents();
+```http
+GET /events
 ```
 
----
-
-## 🧩 API Endpoints
-
-| Method | Endpoint           | Description                |
-| :----: | ------------------ | -------------------------- |
-| `GET`  | `/events`          | Fetch all events           |
-| `GET`  | `/events/:eventId` | Fetch a single event by ID |
-
----
-
-## 🔍 Example Response
-
-### `GET /events`
+**Success Response (200):**
 
 ```json
 {
-  "title": "Tech Conference",
-  "hostedBy": "Tech Innovators",
-  "type": "Offline",
-  "thumbnail": "https://images.unsplash.com/photo-example",
-  "description": "Stay ahead in the world of technology...",
-  "startDateTime": "2026-07-13T07:00:00.000Z",
-  "endDateTime": "2026-07-13T10:00:00.000Z",
-  "venue": "Tech City Convention Center",
-  "address": "101 Innovation Drive, City",
-  "price": 2500,
-  "speakers": [
+  "success": true,
+  "events": [
     {
-      "name": "Amit Verma",
-      "designation": "CTO, CloudNova",
-      "image": "https://images.unsplash.com/photo-example"
-    },
-    {
-      "name": "Priya Mehta",
-      "designation": "Lead Developer, CodeCrafters",
-      "image": "https://images.unsplash.com/photo-example"
+      "_id": "eventId",
+      "title": "Tech Conference",
+      "hostedBy": "Tech Innovators",
+      "type": "Offline",
+      "thumbnail": "https://images.unsplash.com/photo",
+      "description": "Stay ahead in the world of technology ...",
+      "startDateTime": "date",
+      "endDateTime": "date",
+      "venue": "Tech City Convention Center",
+      "address": "101 Innovation Drive, City",
+      "price": 2500,
+      "speakers": [
+        {
+          "_id": "id",
+          "name": "Amit Verma",
+          "designation": "CTO, CloudNova",
+          "image": "https://images.unsplash.com/photo"
+        }
+      ],
+      "dressCode": "Business casual",
+      "ageRestriction": "18 and above",
+      "tags": ["technology", "conference", "web"]
     }
-  ],
-  "dressCode": "Business casual",
-  "ageRestriction": "18 and above",
-  "tags": ["technology", "conference", "ai", "web"]
+  ]
+}
+```
+
+**Error Response (404):**
+
+```json
+{
+  "success": false,
+  "message": "No events found."
 }
 ```
 
 ---
 
-## 🧠 How to Run
+### 🔍 Get Event by ID
 
-```bash
-# 1️⃣ Install dependencies
-npm install
-
-# 2️⃣ Add .env file
-# (Include MONGODB URI and PORT)
-
-# 3️⃣ Start the server
-npm start
+```http
+GET /events/:eventId
 ```
 
-Server will run at 👉 **[http://localhost:3000](http://localhost:3000)**
+**Success Response (200):**
+
+```json
+{
+  "success": true,
+  "event": {
+    "_id": "eventId",
+    "title": "Tech Conference",
+    "venue": "Tech City Convention Center",
+    "price": 2500,
+    ...
+  }
+}
+```
+
+**Error Response (404):**
+
+```json
+{
+  "success": false,
+  "message": "Event not found."
+}
+```
 
 ---
 
-## 🔗 Frontend Repository
+## 🔄 Frontend Integration
 
-👉 [Meetup App Frontend](https://github.com/ajmal92786/meetup-app-frontend)
+This backend is consumed by the Meetup frontend application:
 
----
+🔗 Frontend Repo: [https://github.com/ajmal92786/meetup-app-frontend](https://github.com/ajmal92786/meetup-app-frontend)
 
-## 📜 License
-
-This project is licensed under the **MIT License**.
+The frontend communicates with this server using REST APIs and fetches data in JSON format.
 
 ---
 
-## 👨‍💻 Author
+## 📬 Contact
 
-**Ajmal Raza**
-📧 [ajmalbly27@gmail.com](mailto:ajmalbly27@gmail.com)
-💼 [LinkedIn](https://www.linkedin.com/in/mohd-ajmal-raza)
+For bugs or feature requests:
+
+📧 **[ajmalbly27@gmail.com](mailto:ajmalbly27@gmail.com)**
